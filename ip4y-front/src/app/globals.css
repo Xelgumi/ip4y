@@ -47,7 +47,7 @@ body {
 }
 
 .lista{
-  max-width: 1200px;
+  max-width: 80%;
   background: #fff1;
   padding: 50px;
   border-radius: 5px;
@@ -81,7 +81,10 @@ h1{
   font-size: 30px;
   margin-bottom: 10px;
 }
-
+button.api-btn{
+  font-size: 15px;
+  margin: 10px auto;
+}
 button{
   background: rgb(22, 22, 124);
   color: #fff;

@@ -30,6 +30,8 @@ Route::middleware(['cors'])->group(function () {
     // Rotas que requerem CORS
     Route::post('/adicionar-pessoa', 'App\Http\Controllers\PessoaController@adicionarPessoa');
     Route::get('/lista-pessoas', 'App\Http\Controllers\PessoaController@listarPessoas');
+    Route::put('/atualizar-pessoas/{cpf}', 'App\Http\Controllers\PessoaController@atualizarPessoa');
+    Route::delete('/deletar-pessoa/{cpf}', 'App\Http\Controllers\PessoaController@deletarPessoa');
 });
 
 //Route::post('/adicionar-pessoa', 'App\Http\Controllers\PessoaController@adicionarPessoa')->middleware('cors');

@@ -8,6 +8,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PessoaController extends Controller
 {
@@ -60,40 +61,65 @@ class PessoaController extends Controller
     
             return response()->json(['data' => $pessoas], 200);
         }
-        public function atualizarPessoa(Request $request, $id)
+        public function atualizarPessoa(Request $request, $cpf)
+        {
+            try {
+                // Validação dos dados recebidos
+                $validator = Validator::make($request->all(), [
+                    'nome' => 'required|string',
+                    'sobrenome' => 'required|string',
+                    'data_nascimento' => 'required|date_format:d-m-Y',
+                    'email' => 'required|email',
+                    'genero' => 'required|string',
+                ]);
+    
+                if ($validator->fails()) {
+                    return response()->json(['error' => $validator->errors()], 400);
+                }
+    
+                // Busca a pessoa pelo CPF
+                $pessoa = Pessoa::where('cpf', $cpf)->firstOrFail();
+    
+                // Atualiza os dados da pessoa
+                $dataNascimento = Carbon::createFromFormat('d-m-Y', $request->input('data_nascimento'))->toDateString();
+                $pessoa->update([
+                    'nome' => $request->input('nome'),
+                    'sobrenome' => $request->input('sobrenome'),
+                    'data_nascimento' => $dataNascimento,
+                    'email' => $request->input('email'),
+                    'genero' => $request->input('genero'),
+                ]);
+    
+                // Configuração correta dos cabeçalhos CORS
+                $headers = [
+                    'Access-Control-Allow-Origin' => 'http://localhost:3000',
+                    'Access-Control-Allow-Credentials' => 'true',
+                ];
+    
+                return response()->json(['message' => 'Pessoa atualizada com sucesso', 'data' => $pessoa], 200, $headers);
+            } catch (\Exception $e) {
+                Log::error('Erro na atualizarPessoa: ' . $e->getMessage());
+                return response()->json(['error' => 'Erro interno do servidor.', 'details' => $e->getMessage()], 500);
+            }
+            }
+            public function deletarPessoa($id)
             {
                 try {
-                    // Validação dos dados recebidos
-                    $request->validate([
-                        'nome' => 'required|string',
-                        'sobrenome' => 'required|string',
-                        'data_nascimento' => 'required|date',
-                        'email' => 'required|email',
-                        'genero' => 'required|string',
-                    ]);
-
                     // Busca a pessoa pelo ID
                     $pessoa = Pessoa::findOrFail($id);
-
-                    // Atualiza os dados da pessoa
-                    $dataNascimento = Carbon::createFromFormat('d-m-Y', $request->input('data_nascimento'))->format('Y-m-d');
-                    $pessoa->update([
-                        'nome' => $request->input('nome'),
-                        'sobrenome' => $request->input('sobrenome'),
-                        'data_nascimento' => $dataNascimento,
-                        'email' => $request->input('email'),
-                        'genero' => $request->input('genero'),
-                    ]);
-
+        
+                    // Deleta a pessoa
+                    $pessoa->delete();
+        
                     // Configuração correta dos cabeçalhos CORS
                     $headers = [
                         'Access-Control-Allow-Origin' => 'http://localhost:3000',
                         'Access-Control-Allow-Credentials' => 'true',
                     ];
-
-                    return response()->json(['message' => 'Pessoa atualizada com sucesso', 'data' => $pessoa], 200, $headers);
+        
+                    return response()->json(['message' => 'Pessoa deletada com sucesso'], 200, $headers);
                 } catch (\Exception $e) {
-                    Log::error('Erro na atualizarPessoa: ' . $e->getMessage());
+                    Log::error('Erro na deletarPessoa: ' . $e->getMessage());
                     return response()->json(['error' => 'Erro interno do servidor.', 'details' => $e->getMessage()], 500);
                 }
             }

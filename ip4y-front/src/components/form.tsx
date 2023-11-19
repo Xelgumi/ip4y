@@ -98,7 +98,7 @@ const FormularioUsuario: React.FC<FormularioUsuarioProps> = ({ onInserir }) => {
 
   const [cpfValido, setCpfValido] = useState(true); // Estado para controlar se o CPF é válido
   const [dataValida, setDataValida] = useState(true); // Estado para controlar se a Data é válido
-  const [emailValido, setEmailValido] = useState(true); // Estado para controlar se a Data é válido
+  const [emailValido, setEmailValido] = useState(true); // Estado para controlar se a E-Mail é válido
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUsuario((prevUsuario) => ({
