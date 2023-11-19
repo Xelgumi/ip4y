@@ -1,4 +1,3 @@
-// ListaUsuario.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import InputMask from 'react-input-mask';
@@ -41,8 +40,6 @@ const validarData = (data: string): boolean => {
 
 
 const validarEmail = (email: string) : boolean => {
-  // Lógica de validação de e-mail
-  // Pode ser uma expressão regular ou outra lógica de validação
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 };
@@ -50,14 +47,12 @@ const validarEmail = (email: string) : boolean => {
 const ListaUsuario: React.FC = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [edicao, setEdicao] = useState<{ [cpf: string]: boolean }>({});
-  const [dataValida, setDataValida] = useState(true); // Estado para controlar se a Data é válido
-  const [emailValido, setEmailValido] = useState(true); // Estado para controlar se a E-Mail é válido
+  const [dataValida, setDataValida] = useState(true);
+  const [emailValido, setEmailValido] = useState(true);
   useEffect(() => {
-    // Função para obter a lista de usuários
     const obterUsuarios = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/lista-pessoas');
-        // Verifica se a resposta contém um array antes de chamar map
         if (response.data && response.data.data && Array.isArray(response.data.data)) {
           setUsuarios(response.data.data);
         } else {
@@ -68,11 +63,8 @@ const ListaUsuario: React.FC = () => {
       }
     };
 
-    // Chama a função de obter usuários ao montar o componente
     obterUsuarios();
-  }, []); // O segundo argumento vazio garante que useEffect é chamado apenas uma vez
-
-  // Função para habilitar/desabilitar edição de um usuário
+  }, []);
   const toggleEdicao = (cpf: string) => {
     setEdicao((prevEdicao) => ({
       ...prevEdicao,
@@ -80,8 +72,6 @@ const ListaUsuario: React.FC = () => {
     }));
   };
 
-  // Função para atualizar campos editáveis
-// Função para atualizar campos editáveis
 const atualizarCampoEditavel = (cpf: string, campo: string, valor: string) => {
   setUsuarios((prevUsuarios) =>
     prevUsuarios.map((usuario) =>
@@ -90,21 +80,17 @@ const atualizarCampoEditavel = (cpf: string, campo: string, valor: string) => {
   );
 };
   
-  // Função para deletar um usuário
   const deletarUsuario = async (cpf: string) => {
-    // Confirmação do usuário antes de deletar
     const confirmacao = window.confirm('Tem certeza de que deseja deletar este usuário?');
 
     if (confirmacao) {
       try {
-        // Implemente a lógica de exclusão na sua API
-        // Exemplo de requisição fictícia
+
         await axios.delete(`http://localhost:8000/api/deletar-pessoa/${cpf}`);
 
-        // Atualize a lista de usuários removendo o usuário deletado
         setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario.cpf !== cpf));
         
-        // Desative o modo de edição se o usuário estiver sendo editado
+
         if (edicao[cpf]) {
           setEdicao((prevEdicao) => ({
             ...prevEdicao,
@@ -116,19 +102,16 @@ const atualizarCampoEditavel = (cpf: string, campo: string, valor: string) => {
       }
     }
   };
-  // Função para salvar as edições de um usuário
-// Função para salvar as edições de um usuário
 const salvarEdicao = async (cpf: string) => {
   const usuarioEditavel = usuarios.find((usuario) => usuario.cpf === cpf);
 
-  // Validação da data
+
   if (usuarioEditavel && !validarData(inverterFormatoData(usuarioEditavel.data_nascimento))) {
     setDataValida(false);
     alert('Data de nascimento inválida. Por favor, corrija.');
     return;
   }
 
-  // Validação do e-mail
   if (usuarioEditavel && !validarEmail(usuarioEditavel.email)) {
     setEmailValido(false);
     alert('E-mail inválido. Por favor, corrija.');
@@ -143,7 +126,7 @@ const salvarEdicao = async (cpf: string) => {
     }
 
     await axios.put(`http://localhost:8000/api/atualizar-pessoas/${cpf}`, {
-      ...usuarioEditavel,  // Envie todos os campos atualizados
+      ...usuarioEditavel, 
       data_nascimento: inverterFormatoData(usuarioEditavel.data_nascimento),
     });
 
@@ -158,7 +141,6 @@ const salvarEdicao = async (cpf: string) => {
   setEmailValido(true);
 };
 
-// Função auxiliar para formatar a data de "AAAA-MM-DD" para "DD-MM-AAAA"
 const formatarData = (data: string) => {
   const partes = data.split('-');
   if (partes.length === 3) {
@@ -167,7 +149,6 @@ const formatarData = (data: string) => {
   return data;
 };
 
-// Função auxiliar para inverter a data de "DD-MM-AAAA" para "AAAA-MM-DD"
 const inverterFormatoData = (data: string) => {
   const partes = data.split('-');
   if (partes.length === 3) {

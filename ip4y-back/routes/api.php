@@ -14,18 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-// Route::post('/adicionar-pessoa', 'App\Http\Controllers\PessoaController@adicionarPessoa');
-
-// // No controlador ou arquivo de rota
-// Route::options('/adicionar-pessoa', function () {
-//     return response()->json()->header('Access-Control-Allow-Origin', '*')
-//                              ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-//                              ->header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
-// });
-
 Route::middleware(['cors'])->group(function () {
     // Rotas que requerem CORS
     Route::post('/adicionar-pessoa', 'App\Http\Controllers\PessoaController@adicionarPessoa');
@@ -33,8 +21,3 @@ Route::middleware(['cors'])->group(function () {
     Route::put('/atualizar-pessoas/{cpf}', 'App\Http\Controllers\PessoaController@atualizarPessoa');
     Route::delete('/deletar-pessoa/{cpf}', 'App\Http\Controllers\PessoaController@deletarPessoa');
 });
-
-//Route::post('/adicionar-pessoa', 'App\Http\Controllers\PessoaController@adicionarPessoa')->middleware('cors');
-//Route::get('/listar-pessoas', 'App\Http\Controllers\PessoaController@listarPessoas');
-//Route::post('/adicionar-pessoa', 'PessoaController@adicionarPessoa');
-//Route::options('/adicionar-pessoa', 'PessoaController@adicionarPessoa');

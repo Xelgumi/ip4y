@@ -67,7 +67,6 @@ const validarData = (data: string): boolean => {
   const [dia, mes, ano] = data.split('-');
   const dataObj = new Date(parseInt(ano), parseInt(mes) - 1, parseInt(dia));
 
-  // Verifica se o objeto de data foi criado corretamente e se os valores de dia, mês e ano são válidos
   return (
     !isNaN(dataObj.getTime()) &&
     parseInt(dia) === dataObj.getDate() &&
@@ -79,8 +78,6 @@ const validarData = (data: string): boolean => {
 };
 
 const validarEmail = (email: string) : boolean => {
-  // Lógica de validação de e-mail
-  // Pode ser uma expressão regular ou outra lógica de validação
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 };
@@ -96,9 +93,9 @@ const FormularioUsuario: React.FC<FormularioUsuarioProps> = ({ onInserir }) => {
     genero: '',
   });
 
-  const [cpfValido, setCpfValido] = useState(true); // Estado para controlar se o CPF é válido
-  const [dataValida, setDataValida] = useState(true); // Estado para controlar se a Data é válido
-  const [emailValido, setEmailValido] = useState(true); // Estado para controlar se a E-Mail é válido
+  const [cpfValido, setCpfValido] = useState(true);
+  const [dataValida, setDataValida] = useState(true);
+  const [emailValido, setEmailValido] = useState(true);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUsuario((prevUsuario) => ({
@@ -106,7 +103,6 @@ const FormularioUsuario: React.FC<FormularioUsuarioProps> = ({ onInserir }) => {
       [name]: value,
     }));
 
-    // Validar o CPF
     if (name === 'cpf') {
       setCpfValido(validarCPF(value));
     }
@@ -149,10 +145,7 @@ const FormularioUsuario: React.FC<FormularioUsuarioProps> = ({ onInserir }) => {
       });
       
       
-      // Se a requisição foi bem-sucedida, você pode chamar a função de inserir do componente pai
       if (response.status === 200) {
-        //onInserir(usuario);
-        // Limpar os campos após a inserção, se necessário
 
          alert("Usuário Cadastrado com sucesso");
          setUsuario({
@@ -165,24 +158,19 @@ const FormularioUsuario: React.FC<FormularioUsuarioProps> = ({ onInserir }) => {
         });
       }
     } catch (error) {
-      // Se ocorrer uma exceção, tratamos como erro genérico
       console.error('Erro ao adicionar pessoa:', error);
   
-      // Se o erro for do tipo AxiosError, podemos verificar o status da resposta
       if (axios.isAxiosError(error) && error.response) {
-        const responseData = error.response.data; // Correção aqui
+        const responseData = error.response.data;
   
-        // Verificar se a mensagem de erro indica duplicidade de CPF para status 422
         if (
           responseData.message === "The given data was invalid." &&
           responseData.errors &&
           responseData.errors.cpf &&
           responseData.errors.cpf[0] === "The cpf has already been taken."
         ) {
-          // Exibir alerta personalizado para duplicidade de CPF
           alert("CPF já cadastrado");
         } else {
-          // Exibir alerta genérico para outros erros 422 ou outros status de erro
           alert('Erro ao adicionar pessoa, entre em contato com o administrador');
         }
       }
@@ -207,7 +195,6 @@ const FormularioUsuario: React.FC<FormularioUsuarioProps> = ({ onInserir }) => {
         <h1>Cadastro</h1>
       <label>
         CPF:
-        {/* <input type="text" name="cpf" value={usuario.cpf} onChange={handleChange} /> */}
         <InputMask 
           mask="999.999.999-99"
           maskChar={null}
@@ -232,7 +219,6 @@ const FormularioUsuario: React.FC<FormularioUsuarioProps> = ({ onInserir }) => {
 
       <label>
         Data de Nascimento:
-        {/* <input type="text" name="data_nascimento" value={usuario.data_nascimento} onChange={handleChange} /> */}
         <InputMask 
           mask="99-99-9999"
           maskChar={null}

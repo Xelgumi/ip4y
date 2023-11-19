@@ -102,11 +102,11 @@ class PessoaController extends Controller
                 return response()->json(['error' => 'Erro interno do servidor.', 'details' => $e->getMessage()], 500);
             }
             }
-            public function deletarPessoa($id)
+            public function deletarPessoa($cpf)
             {
                 try {
-                    // Busca a pessoa pelo ID
-                    $pessoa = Pessoa::findOrFail($id);
+                    // Busca a pessoa pelo CPF
+                    $pessoa = Pessoa::findOrFail($cpf);
         
                     // Deleta a pessoa
                     $pessoa->delete();
