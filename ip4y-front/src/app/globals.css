@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 800px;
+  background: #fff1;
+  padding: 50px;
+  border-radius: 5px;
+}
+
+.formulario label{
+  width: 100%;
+  display: flex;
+  margin-bottom: 10px;
+  flex-direction: column;
+}
+.formulario input{
+  color: #666;
+}
+
+.lista{
+  max-width: 1200px;
+  background: #fff1;
+  padding: 50px;
+  border-radius: 5px;
+}
+
+.lista th {
+  text-align: left;
+  border: 1px solid white;
+  background: #666;
+  color:#fff;
+}
+
+.lista td{
+  border: 1px solid white;
+  padding: 5px;
+}
+
+.lista tr:not(.header):hover{
+  background-color: #2e5a91;
+}
+
+.lista button{
+  padding: 5px;
+  font-size: 25px;
+  margin: 0;
+}
+.lista input{
+  background: #fff4;
+}
+h1{
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+button{
+  background: rgb(22, 22, 124);
+  color: #fff;
+  padding: 10px 30px;
+  margin: 15px auto;
+  border-radius: 5px;
+}
